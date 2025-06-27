@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # new_userapp
 
 A new Flutter project.
@@ -25,3 +26,6 @@ Total: 12 hours over 3 sessions
 * README & polish: 0.5 hour
 
 
+=======
+# Smartmart
+>>>>>>> bdf68e884bcb0a1aced91542ab59cf7c1d4cc685
