@@ -25,6 +25,26 @@ Total: 12 hours over 3 sessions
 * authentication & profile: 2 hours
 * README & polish: 0.5 hour
 
+SetUp Instructions :
+github link : https://github.com/Sangeethh2001/Smartmart
+install plugins Flutter and Dart
+in Terminal : flutter Pub get
+flutter run
+
+Libraries used : 
+* cupertino_icons: ^1.0.2
+* http: ^0.13.5
+* shared_preferences: ^2.2.0
+* flutter_bloc: ^9.1.1
+* google_fonts: ^4.0.4
+* flutter_launcher_icons: ^0.10.0
+
+Any Assumptions made : 
+* Splash screen for good impression
+* Login and Signup ,Signup for first registration,it takes to Users screen
+* Search bar to search users,we can search them with their name and id.It works on client-side
+* pagination for next page
+* Profile screen for viewing login user ,change password option for changing pwd
 
 =======
 # Smartmart

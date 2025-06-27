@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_userapp/bloc/user/user_bloc.dart';
@@ -20,6 +21,9 @@ class UserList extends StatefulWidget {
 
 class _UserListState extends State<UserList> {
   final ScrollController _scrollController = ScrollController();
+  final Connectivity _connectivity = Connectivity();
+  StreamSubscription<ConnectivityResult>? _subscription;
+  bool isConnected = true;
   Timer? _debounce;
   List<User> usersList = [],firstList = [];
   int stopScroll = 0,pageNo = 1;
@@ -41,14 +45,22 @@ class _UserListState extends State<UserList> {
   @override
   void initState() {
     userBloc = BlocProvider.of<UserBloc>(context);
-    userBloc.add(LoadUsers(pageNo));// Calls Bloc to fetch data from Api
-    _setupScrollListener();
+    _subscription = _connectivity.onConnectivityChanged.listen((result) {
+      if (result == ConnectivityResult.none) {
+        isConnected = false;
+      }else{
+        isConnected = true;
+        userBloc.add(LoadUsers(pageNo));// Calls Bloc to fetch data from Api
+        _setupScrollListener();
+      }
+    });
     super.initState();
   }
 
   @override
   void dispose() {
     _debounce?.cancel();
+    _subscription?.cancel();
     _scrollController.dispose();
     super.dispose();
   }
@@ -70,11 +82,11 @@ class _UserListState extends State<UserList> {
         ),
         actions: [
           InkWell(
-            onTap: (){
+            onTap:isConnected ? (){
               Navigator.push(context, MaterialPageRoute(builder: (context){
                 return const ProfilePage();
               }));
-            },
+            } : null,
             child: Padding(
               padding: const EdgeInsets.only(right: 12),
               child: Column(
@@ -93,7 +105,7 @@ class _UserListState extends State<UserList> {
         ],
         toolbarHeight: appBarHeight(screenHeight,0.2),
       ),
-      body: BlocBuilder<UserBloc,UserState>(
+      body:isConnected ? BlocBuilder<UserBloc,UserState>(
         builder: (context, state) {
             if(state is UserError){
               return Center(child: Text('Error: ${state.message}'));
@@ -166,7 +178,7 @@ class _UserListState extends State<UserList> {
               ),
             );
         },
-      ),
+      ) : Center(child: Text('No Internet Connection!')),
     );
   }
 }
